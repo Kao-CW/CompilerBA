@@ -18,7 +18,7 @@ int main()
         p++;
         i++;
     }
-    printf("你好");
+    
     return 0;
 }
 
