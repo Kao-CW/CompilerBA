@@ -7,6 +7,8 @@ int i = 0;
 int cnt = 0;
 int flag2 = 0;
 char s[100];
+char pr[100];
+int prp = 0;
 bool checksemi = false;
 bool checkBR = true;
 bool checkstr = true;
@@ -15,6 +17,7 @@ char *caseid(char *str);
 char *casesemi(char *str);
 int invaildinput();
 char *casestr(char *str);
+int checkgm(bool a1, bool a2, bool a3);
 
 char *scanner(char* str)
 {
@@ -135,6 +138,14 @@ char *casestr(char *str)
     return str;
 }
 
+int checkgm(bool a1,bool a2,bool a3)
+{
+    if(a1==true&&a2==true&&a3==true)
+    {
+        return 1;
+    }
+}
+
 int main()
 {
     FILE *fp;
@@ -145,5 +156,9 @@ int main()
     }
     char *p =s;
     scanner(p);
+    if(checkgm(checkBR, checksemi, checkstr))
+    {
+
+    }
     return 0;
 }

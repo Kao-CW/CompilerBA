@@ -1,30 +1,15 @@
-
 #include <stdio.h>
 #include<string.h>
 #include<stdlib.h>
-char *func(char *p);
+char str[1000];
 int main()
 {
-    char *p="kljjkavdf";
-    
-    int i = 0;
-    while (*p !='\0')
-	{
-        if(*p=='a')
-        {
-            p=func(p);
-        }
-        printf("%c %d\n", *p,i);
-        p++;
-        i++;
-    }
-    
+     printf("input:\n");
+    scanf("%s",str);
+    printf("output:\n");
+    printf("%s",str);
+
+
     return 0;
 }
 
-char *func(char *p)
-{
-    printf("%c\n", *p);
-    p++;
-    return p;
-}
