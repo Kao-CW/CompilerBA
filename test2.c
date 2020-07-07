@@ -6,9 +6,11 @@
 char s[100];
 char pr[100];
 int prp = 0;
-char *p,*q;
+char *q = pr;
+char *p;
 int i = 0;
 char *fun(char *p,int prp);
+
 
 int main()
 {
@@ -19,19 +21,22 @@ int main()
         i++;
     }
     char *p =s;
+
+    p++;
+ 
     /*while(*p!='\0')
     {
         printf("%c", *p);
         p++;
     }*/
-    fun(p,prp);
+    //fun(p,prp);
     /*pr[0] ='0';
     pr[1]='a';
     printf("\n%c\n", pr[0]);
     printf("%c\n", pr[1]);*/
 
     //q = pr;
-    printf("111111\n");
+    printf("-----------------\n");
     printf("%c", pr[0]);
     printf("%c", pr[1]);
     printf("%c", pr[2]);
@@ -53,12 +58,7 @@ char *fun(char *p,int prp)
     }
     pr[prp] = *p;
     printf("pr[ %d ] = %c \n", prp, pr[prp]);
-    /*prp++;
-    printf("\nprp++1: %d", prp);
-    p++;
-    s[prp] ='1';
-    prp++;
-    printf("\nprp++2: %d", prp);*/
+   
     
     return p;
 }

@@ -21,7 +21,7 @@ int checkgm(bool a1, bool a2, bool a3);
 
 char *scanner(char* str)
 {
-    while (*str != '\0')
+    while (*str != EOF)
     {
         if ((*str >= 'a' && *str <= 'z') || (*str >= 'A' && *str <= 'Z'))
         {
@@ -62,11 +62,11 @@ char *scanner(char* str)
         {
             checkstr = false;
             str=casestr(str);
-            printf("after casestr str point to: %c\n", *str);
+            //printf("after casestr str point to: %c\n", *str);
         }
         else if (*str == ';')
         {
-            printf("before casesemi str point to: %c\n", *str);
+            //printf("before casesemi str point to: %c\n", *str);
             str=casesemi(str);
             
         }
@@ -120,7 +120,7 @@ int invaildinput()//ok
 char *casestr(char *str)
 {
     str++;
-    while(*str!='"')//||*str!='\0'||*str!=')'
+    while(*str!='"'||*str!=EOF)//
     {
         printf("%c ", *str);
         str++; 
@@ -144,6 +144,7 @@ int checkgm(bool a1,bool a2,bool a3)
     {
         return 1;
     }
+    return 0;
 }
 
 int main()
@@ -156,9 +157,6 @@ int main()
     }
     char *p =s;
     scanner(p);
-    if(checkgm(checkBR, checksemi, checkstr))
-    {
-
-    }
+   
     return 0;
 }
