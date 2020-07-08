@@ -89,8 +89,6 @@ char *scanner(char* str)
             invaildinput();
         }
         
-        //cnt++;
-        //printf("%d\n", cnt);
         str++;
     }
     

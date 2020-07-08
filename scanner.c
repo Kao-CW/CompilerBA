@@ -23,7 +23,7 @@ void final_print();
 
 char *scanner(char* str)
 {
-    while (*str !=EOF)
+    while (*str !='\0')
     {
         if ((*str >= 'a' && *str <= 'z') || (*str >= 'A' && *str <= 'Z'))
         {
@@ -86,11 +86,14 @@ char *scanner(char* str)
         }
         else
         {
+            printf("here\n");
+            //printf("str=%c \n", str);
             invaildinput();
         }
         str++;
     }
-    if (*(str-- )!= ';')
+    str--;
+    if (*str!= ';')
     {
         invaildinput();
     }
@@ -198,13 +201,16 @@ void addtoken(char token[])
 
 int main()
 {
-    FILE *fp;
+    /*FILE *fp;
     fp = fopen("D://CPROJECT//CompilerBA//mytestcase.txt","r");
     while((s[i]=fgetc(fp))!=EOF)
     {
         i++;
-    }
+    }*/
+    scanf("%s", s);
+    printf("%s",s);
     char *p =s;
+    printf("%c", *p);
     scanner(p);
     if(checkgm(checkBR, checksemi, checkstr))
     {

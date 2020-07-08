@@ -1,2 +1,2 @@
-str.length;
-1111
+"test_string";
+Test_ID;
