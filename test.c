@@ -4,7 +4,7 @@
 char str[1000];
 int main()
 {
-     printf("input:\n");
+    printf("input:\n");
     scanf("%s",str);
     printf("output:\n");
     printf("%s",str);

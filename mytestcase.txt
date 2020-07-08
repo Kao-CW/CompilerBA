@@ -1,1 +1,2 @@
-str.length("123);
+str.length;
+1111

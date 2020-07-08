@@ -5,10 +5,9 @@
 
 int i = 0;
 int cnt = 0;
-int flag2 = 0;
 char s[100];
 char pr[100];
-int prp = 0;
+char *prp=pr;
 bool checksemi = false;
 bool checkBR = true;
 bool checkstr = true;
@@ -18,18 +17,25 @@ char *casesemi(char *str);
 int invaildinput();
 char *casestr(char *str);
 int checkgm(bool a1, bool a2, bool a3);
+void add(char *str);
+void addn();
+void addtoken(char token[]);
+void final_print();
 
 char *scanner(char* str)
 {
-    while (*str != EOF)
+    while (*str !=EOF)
     {
         if ((*str >= 'a' && *str <= 'z') || (*str >= 'A' && *str <= 'Z'))
         {
             str=caseid(str);
-            //printf("after caseid str point to: %c\n", *str);
+            
         }
         else if (*str == '.')
         {
+            addtoken("DOT ");
+            add(str);
+            addn();
             printf("DOT . \n");
         }
         else if (*str == '(')
@@ -39,6 +45,9 @@ char *scanner(char* str)
             {
                 str++;
                 checkBR = false;
+                addtoken("LBR ");
+                add(str);
+                addn();
                 printf("LBR ( \n");
             }
             else
@@ -51,6 +60,9 @@ char *scanner(char* str)
             if(!checkBR)
             {
                 checkBR = true;
+                addtoken("RBR ");
+                add(str);
+                addn();
                 printf("RBR ) \n");
             }
             else
@@ -62,34 +74,40 @@ char *scanner(char* str)
         {
             checkstr = false;
             str=casestr(str);
-            //printf("after casestr str point to: %c\n", *str);
         }
         else if (*str == ';')
         {
-            //printf("before casesemi str point to: %c\n", *str);
-            str=casesemi(str);
-            
+            str=casesemi(str);           
+        }
+        else if (*str=='\n')
+        {
+            str++;
         }
         else
         {
+            printf("case scanner else\n");
             invaildinput();
         }
-        cnt++;
+        
+        //cnt++;
         //printf("%d\n", cnt);
         str++;
     }
+    
     return str;
 }
 
 char *caseid(char *str)//ok
 {
-
+    addtoken("ID ");
     while((*str >= 'a' && *str <= 'z') || (*str >= 'A' && *str <= 'Z')||(*str >= '0' && *str <= '9')||*str=='_')
     {
         printf("%c ", *str);
+        add(str);
         str++;       
     }
-    printf("\n----ID---- \n");
+    printf("\n-------ID------- \n");
+    addn();
     str--;
     return str;
 }
@@ -107,7 +125,10 @@ char *casesemi(char *str)//ok
         invaildinput();
     }
     printf("SEMICOLON ; \n");
+    addtoken("SEMICOLON ");
     str--;
+    add(str);
+    addn();
     return str;
 }
 
@@ -119,10 +140,12 @@ int invaildinput()//ok
 
 char *casestr(char *str)
 {
+    addtoken("STRLIT ");
     str++;
-    while(*str!='"'||*str!=EOF)//
+    while(*str!='"'^*str==EOF)//||*str=='\0'||*str==')'
     {
         printf("%c ", *str);
+        add(str);
         str++; 
     }
     if(*str=='"')
@@ -135,16 +158,48 @@ char *casestr(char *str)
         printf("casestr");
         invaildinput();
     }
+    addn();
     return str;
 }
 
 int checkgm(bool a1,bool a2,bool a3)
+
 {
     if(a1==true&&a2==true&&a3==true)
     {
         return 1;
     }
     return 0;
+}
+
+void add(char *str)
+{
+    *prp=*str;
+    prp++;
+}
+
+void addn()
+{
+    *prp = '\n';
+    prp++;
+}
+
+void final_print()
+{
+    char *tmp;
+    tmp = pr;
+    while(*tmp!='\0')
+    {
+        printf("%c", *tmp);
+        tmp++;
+    }
+}
+
+void addtoken(char token[])
+{
+    char *tmp=token; 
+    strcat(prp, tmp);
+    prp = prp + strlen(tmp);
 }
 
 int main()
@@ -157,6 +212,14 @@ int main()
     }
     char *p =s;
     scanner(p);
-   
+    printf("---------------final--------------------\n");
+    if(checkgm(checkBR, checksemi, checkstr))
+    {
+        final_print();
+    }
+    else
+    {
+        printf("invaild input\n");
+    }
     return 0;
 }
