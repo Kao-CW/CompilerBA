@@ -86,18 +86,19 @@ char *scanner(char* str)
         }
         else
         {
-            printf("here\n");
+            
             //printf("str=%c \n", str);
             invaildinput();
         }
         str++;
     }
     str--;
-    if (*str!= ';')
+    str--;
+    /*if (*str!= ';')
     {
         invaildinput();
     }
-    str++;
+    str++;*/
     return str;
 }
 
@@ -142,7 +143,7 @@ char *casestr(char *str)
 {
     addtoken("STRLIT ");
     str++;
-    while(*str!='"'^*str==EOF)//||*str=='\0'||*str==')'
+    while(*str!='"'^*str=='\0')//||*str=='\0'||*str==')'
     {
         add(str);
         str++; 
@@ -207,10 +208,8 @@ int main()
     {
         i++;
     }*/
-    scanf("%s", s);
-    printf("%s",s);
+    scanf("%[^\0]", s);
     char *p =s;
-    printf("%c", *p);
     scanner(p);
     if(checkgm(checkBR, checksemi, checkstr))
     {
