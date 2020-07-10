@@ -25,10 +25,9 @@ char *scanner(char* str)
 {
     while (*str !='\0')
     {
-        if ((*str >= 'a' && *str <= 'z') || (*str >= 'A' && *str <= 'Z')||(*str=='_'))
+        if ((*str >= 'a' && *str <= 'z') || (*str >= 'A' && *str <= 'Z')||*str=='_')
         {
-            str=caseid(str);
-            
+            str=caseid(str);           
         }
         else if (*str == '.')
         {
@@ -52,7 +51,6 @@ char *scanner(char* str)
             }
             else
             {
-                printf("case id\n");
                 invaildinput();
             }*/
         }
@@ -95,8 +93,10 @@ char *scanner(char* str)
             {
                 printf("case newline\n");
                 invaildinput();
-            }*/          
-            str++;
+            }*/
+            //printf("after n str=%c\n", *str);
+            //str++;
+            //printf("after n str++=%c\n", *str);
         }
         else if (*str==' ')
         {
@@ -104,10 +104,10 @@ char *scanner(char* str)
         }
         else
         {
-            printf("case else\n");           
-            printf("str=%c \n", *str);
+            //printf("case else\n");           
+            //printf("str=%c \n", *str);
             str--;
-            printf("str=%c \n", *str);
+            //printf("str--=%c \n", *str);
             invaildinput();
         }
         str++;
@@ -168,6 +168,7 @@ int invaildinput()//ok
 char *casestr(char *str)
 {
     addtoken("STRLIT ");
+    add(str);
     str++;
     while(*str!='"'^*str=='\0')//||*str=='\0'||*str==')'
     {
@@ -177,6 +178,7 @@ char *casestr(char *str)
     if(*str=='"')
     {
         checkstr = true;
+        add(str);
     }
     else
     {

@@ -15,7 +15,7 @@ char *caseid(char *str);
 char *casesemi(char *str);
 int invaildinput();
 char *casestr(char *str);
-int checkgm(bool a1,bool a3);
+int checkgm(bool a1, bool a2, bool a3);
 void add(char *str);
 void addn();
 void addtoken(char token[]);
@@ -25,9 +25,10 @@ char *scanner(char* str)
 {
     while (*str !='\0')
     {
-        if ((*str >= 'a' && *str <= 'z') || (*str >= 'A' && *str <= 'Z')||*str=='_')
+        if ((*str >= 'a' && *str <= 'z') || (*str >= 'A' && *str <= 'Z'))
         {
-            str=caseid(str);           
+            str=caseid(str);
+            
         }
         else if (*str == '.')
         {
@@ -37,15 +38,33 @@ char *scanner(char* str)
         }
         else if (*str == '(')
         {
-            addtoken("LBR ");
-            add(str);
-            addn();
+            str--;
+            if((*str >= 'a' && *str <= 'z') || (*str >= 'A' && *str <= 'Z')||(*str >= '0' && *str <= '9'))
+            {
+                str++;
+                checkBR = false;
+                addtoken("LBR ");
+                add(str);
+                addn();
+            }
+            else
+            {
+                invaildinput();
+            }
         }
         else if (*str == ')')
         {
-            addtoken("RBR ");
-            add(str);
-            addn();
+            if(!checkBR)
+            {
+                checkBR = true;
+                addtoken("RBR ");
+                add(str);
+                addn();
+            }
+            else
+            {
+                invaildinput();
+            }
         }
         else if (*str == '"')
         {
@@ -54,27 +73,36 @@ char *scanner(char* str)
         }
         else if (*str == ';')
         {
-            addtoken("SEMICOLON ");
-            add(str);
-            addn();        
+            str=casesemi(str);           
         }
-        else if (*str=='\n'){}
-        else if (*str==' ')
+        else if (*str=='\n')
         {
+            str--;
+            if (*str != ';')
+            {
+                invaildinput();
+            }          
             str++;
         }
         else
         {
-            str--;
+            
+            //printf("str=%c \n", str);
             invaildinput();
         }
         str++;
     }
-    str++;
+    str--;
+    str--;
+    /*if (*str!= ';')
+    {
+        invaildinput();
+    }
+    str++;*/
     return str;
 }
 
-char *caseid(char *str)
+char *caseid(char *str)//ok
 {
     addtoken("ID ");
     while((*str >= 'a' && *str <= 'z') || (*str >= 'A' && *str <= 'Z')||(*str >= '0' && *str <= '9')||*str=='_')
@@ -87,7 +115,7 @@ char *caseid(char *str)
     return str;
 }
 
-char *casesemi(char *str)
+char *casesemi(char *str)//ok
 {
     str++;
     if(*str=='\n'||*str=='\0'||*str==EOF)
@@ -96,7 +124,6 @@ char *casesemi(char *str)
     }
     else
     {
-        printf("case semi\n");
         invaildinput();
     }
     addtoken("SEMICOLON ");
@@ -106,7 +133,7 @@ char *casesemi(char *str)
     return str;
 }
 
-int invaildinput()
+int invaildinput()//ok
 {
     printf("invaild input\n");
     exit(1);
@@ -115,9 +142,8 @@ int invaildinput()
 char *casestr(char *str)
 {
     addtoken("STRLIT ");
-    add(str);
     str++;
-    while(*str!='"'^*str=='\0')
+    while(*str!='"'^*str=='\0')//||*str=='\0'||*str==')'
     {
         add(str);
         str++; 
@@ -125,7 +151,6 @@ char *casestr(char *str)
     if(*str=='"')
     {
         checkstr = true;
-        add(str);
     }
     else
     {
@@ -135,10 +160,10 @@ char *casestr(char *str)
     return str;
 }
 
-int checkgm(bool a1,bool a3)
+int checkgm(bool a1,bool a2,bool a3)
 
 {
-    if(a1==true&&a3==true)
+    if(a1==true&&a2==true&&a3==true)
     {
         return 1;
     }
@@ -177,19 +202,21 @@ void addtoken(char token[])
 
 int main()
 {
+    /*FILE *fp;
+    fp = fopen("D://CPROJECT//CompilerBA//mytestcase.txt","r");
+    while((s[i]=fgetc(fp))!=EOF)
+    {
+        i++;
+    }*/
     scanf("%[^\0]", s);
     char *p =s;
     scanner(p);
-    if(checkgm(checkBR,checkstr))
+    if(checkgm(checkBR, checksemi, checkstr))
     {
         final_print();
     }
     else
     {
-        printf("%d\n", checkBR);
-        printf("%d\n", checkstr);
-        printf("%d\n", checksemi);
-        printf("final");
         printf("invaild input\n");
     }
     return 0;
