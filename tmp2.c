@@ -29,20 +29,17 @@ char *scanner(char* str)
         }
         else if (*str == '.')
         {
-            addtoken("DOT ");
-            add(str);
+            addtoken("DOT");
             addn();
         }
         else if (*str == '(')
         {
-            addtoken("LBR ");
-            add(str);
+            addtoken("LBR");
             addn();
         }
         else if (*str == ')')
         {
-            addtoken("RBR ");
-            add(str);
+            addtoken("RBR");
             addn();
         }
         else if (*str == '"')
@@ -52,8 +49,7 @@ char *scanner(char* str)
         }
         else if (*str == ';')
         {
-            addtoken("SEMICOLON ");
-            add(str);
+            addtoken("SEMICOLON");
             addn();        
         }
         else if (*str=='\n'){}
@@ -74,10 +70,9 @@ char *scanner(char* str)
 
 char *caseid(char *str)
 {
-    addtoken("ID ");
+    addtoken("ID");
     while((*str >= 'a' && *str <= 'z') || (*str >= 'A' && *str <= 'Z')||(*str >= '0' && *str <= '9')||*str=='_')
     {
-        add(str);
         str++;       
     }
     addn();
@@ -94,18 +89,15 @@ int invaildinput()
 
 char *casestr(char *str)
 {
-    addtoken("STRLIT ");
-    add(str);
+    addtoken("STRLIT");
     str++;
     while(*str!='"'^*str=='\0')
     {
-        add(str);
         str++; 
     }
     if(*str=='"')
     {
         checkstr = true;
-        add(str);
     }
     else
     {
@@ -123,12 +115,6 @@ int checkgm(bool a1,bool a3)
         return 1;
     }
     return 0;
-}
-
-void add(char *str)
-{
-    *prp=*str;
-    prp++;
 }
 
 void addn()
