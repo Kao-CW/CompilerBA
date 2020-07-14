@@ -84,8 +84,6 @@ char *caseid(char *str)
     str--;
     return str;
 }
-
-
 int invaildinput()
 {
     printf("invaild input\n");

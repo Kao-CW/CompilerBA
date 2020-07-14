@@ -12,132 +12,129 @@ void primary();
 void primary_tail();
 char *match(char *str,char *s);
 void error();
-void final_print();
 void peek(char *str);
 char token[20];
 char peekt[20];
-char str1[100];
+char s[100];
 char *str;
+//scanner
+char pr[100];
+char *prp=pr;
+bool checkBR = true;
+bool checkstr = true;
+char *scanner(char *p);
+char *caseid(char *p);
+int invaildinput();
+char *casestr(char *p);
+int checkgm(bool a1,bool a3);
+void addn();
+void addtoken(char token[]);
 
 int main()
 {
-    str = str1;
-    scanf("%[^\0]", str1);
-    while (*str!= '\0')
-    {
-        printf("%c",*str);
-        str++;
+    scanf("%[^\0]", s);
+    char *p = s;
+    scanner(p);
+    if(checkgm(checkBR,checkstr))
+    {    
+        *prp = '$';
+        prp++;
+        addn();
+        str = pr;
+        program();
+        printf("Valid");
     }
-    printf("\n");
-    str = str1;
-    str = gettoken(str);
-    printf("str==%c\n", *str);
-    printf("token==%s\n", token);
-    printf("peek==%s\n", peekt);
-    program();
+    else
+    {
+        printf("invaild input\n");
+    }
+    
+    return 0;
+    //printf("Valid");
 }
 
 void program(){
     stmts();
 }
 void stmts(){
-    //peek(str);
-    printf("strcmp== %d \n ", strcmp(token,"ID"));
-    if((!(strcmp(token,"ID")))||!((strcmp(token,"STRLIT")))){
+    peek(str);
+    if((!(strcmp(peekt,"ID")))||!((strcmp(peekt,"STRLIT")))){
         stmt();
         stmts();
     }
-    else if(!(strcmp(token,"\0"))){
+    else if(!(strcmp(peekt,"$"))||!(strcmp(peekt,"SEMICOLON"))){
         //lam
     }
     else{
-        printf("1---------\n");
         error();
     }
 }
 void stmt(){
     expp();
-    printf("2---------\n");
+    str = gettoken(str);
     match(str,"SEMICOLON");//semi
+    
 }
 void expp(){
     peek(str);
-    printf("token==%s\n", token);
-    printf("peekt==%s\n", peekt);
-    if(!(strcmp(token,"ID"))){
+    if(!(strcmp(peekt,"ID"))){
         primary();
     }
-    else if(!(strcmp(token,"STRLIT"))){
-        printf("3------------------------\n");
+    else if(!(strcmp(peekt,"STRLIT"))){
+        str = gettoken(str);
         match(str,"STRLIT");//strlit
     }
-    else if(!(strcmp(token,"\0"))){
+    else if(!(strcmp(peekt,"$"))||!(strcmp(peekt,"SEMICOLON"))){
         //lam
     }
     else{
-        printf("4-----------------------\n");
         error();
     }
 }
 void primary(){
-    printf("5--------------------------\n");
+    str = gettoken(str);
     match(str,"ID");//id
-    printf("5ok------------------------\n");
     primary_tail();
 }
 void primary_tail(){
-    printf("str==%c\n", *str);
     peek(str);
-    printf("token==%s\n", token);
-    printf("peekt==%s\n", peekt);
-    if(!(strcmp(token,"DOT"))){
-        printf("6--------------------------\n");
+    if(!(strcmp(peekt,"DOT"))){
+        str = gettoken(str);
         match(str,"DOT");//dot
-        printf("6ok------------------------\n");
-        printf("token==%s\n", token);
-        printf("7--------------------------\n");
+        str = gettoken(str);
         match(str,"ID");//id
-        printf("7ok------------------------\n");
         primary_tail();
     }
-    else if (!(strcmp(token,"LBR"))){
-        printf("8-------------------------\n");
+    else if (!(strcmp(peekt,"LBR"))){
+        str = gettoken(str);
         match(str,"LBR");//lbr
-        printf("8ok-----------------------\n");
         expp();
-        printf("9-------------------------\n");
+        str = gettoken(str);
         match(str,"RBR");//rbr
-        printf("9ok-----------------------\n");
         primary_tail();
     }
-    else if(!(strcmp(peekt,"\0"))){
-        //lam
+    else if(!(strcmp(peekt,"$"))||!(strcmp(peekt,"SEMICOLON"))){
+        //lam!(strcmp(token,"\0"))
     }
     else{
-        printf("10-------------------------\n");
         error();
     }
 }
-char *match(char *str,char *s){//ok
+char *match(char *str,char *s){
     if(strcmp(token, s)!=0){
         error();
     }
-    printf("before match token= %s\n", token);
-    printf("before match str= %c\n", *str);
-    str=gettoken(str);
-    printf("after match token= %s\n", token);
-    printf("after match str= %c\n", *str);
     return str;
 
 }
-void error(){//ok
+void error(){
     printf("Invalid\n");
     exit(1);
 }
-char *gettoken(char *str){//ok
+char *gettoken(char *str){
     int i = 0;
     memset(token, '\0', 10);
-    while (*str!= '\n')
+    while ((*str!= '\n')^(*str=='\0'))//^(*str!='\0')
     {
         token[i]= *str;
         str++;
@@ -146,18 +143,119 @@ char *gettoken(char *str){//ok
     str++;
     return str;
 }
-void peek(char *str){
-    memset(peekt, '\0', 10);
+void peek(char *str){ 
     char *p;
     p = str;
     int i = 0;
-    while (*p != '\n')
-    {
-        peekt[i]= *p;
-        p++;
-        i++;
+    memset(peekt, '\0', 10);
+    if(*p=='$'){
+        peekt[0] = '$';
+    }
+    else {
+
+        while ((*p != '\n')^(*str=='\0'))
+       {          
+           peekt[i]= *p;
+           p++;
+           i++;
+       }
     }
 }
-void final_print(){
+//scanner-----------------------------------------------
+char *scanner(char* p){
+    while (*p !='\0')
+    {
+        if ((*p >= 'a' && *p <= 'z') || (*p >= 'A' && *p <= 'Z')||*p=='_')
+        {
+            p=caseid(p);           
+        }
+        else if (*p == '.')
+        {
+            addtoken("DOT");
+            addn();
+        }
+        else if (*p == '(')
+        {
+            addtoken("LBR");
+            addn();
+        }
+        else if (*p == ')')
+        {
+            addtoken("RBR");
+            addn();
+        }
+        else if (*p == '"')
+        {
+            checkstr = false;
+            p=casestr(p);
+        }
+        else if (*p == ';')
+        {
+            addtoken("SEMICOLON");
+            addn();        
+        }
+        else if (*p=='\n'){}
+        else if (*p==' ')
+        {
+            p++;
+        }
+        else
+        {
+            p--;
+            invaildinput();
+        }
+        p++;
+    }
+    p++;
+    return p;
+}
+char *caseid(char *p){
+    addtoken("ID");
+    while((*p >= 'a' && *p <= 'z') || (*p >= 'A' && *p <= 'Z')||(*p >= '0' && *p <= '9')||*p=='_')
+    {
+        p++;       
+    }
+    addn();
+    p--;
+    return p;
+}
+int invaildinput(){
+    printf("invaild input\n");
+    exit(1);
+}
+char *casestr(char *p){
+    addtoken("STRLIT");
 
+    p++;
+    while(*p!='"'^*p=='\0')
+    {
+        p++; 
+    }
+    if(*p=='"')
+    {
+        checkstr = true;
+    }
+    else
+    {
+        invaildinput();
+    }
+    addn();
+    return p;
+}
+int checkgm(bool a1,bool a3){
+    if(a1==true&&a3==true)
+    {
+        return 1;
+    }
+    return 0;
+}
+void addn()
+{
+    *prp = '\n';
+    prp++;
+}
+void addtoken(char token[]){
+    char *tmp=token; 
+    strcat(prp, tmp);
+    prp = prp + strlen(tmp);
 }

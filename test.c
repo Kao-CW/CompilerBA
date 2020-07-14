@@ -18,24 +18,23 @@ int main()
         printf("%c",*q);
         q++;
     }
+    /*
     q= str2;
     printf("\n------------------------\n");
     while(*q!='\0'){
         q=fun(q);
         printf("%s\n",tmp);
-        printf("%c\n",*q);
-        peek(q);
-        printf("%s\n",peekt);
+        //printf("%c\n",*q);
         printf("------------------------\n");
 
-    }
+    }*/
 
     return 0;
 }
 char *fun(char *str){
     int i = 0;
     memset(tmp, '\0', 10);
-    while (*str!= '\n')
+    while ((*str!= '\n')^(*str=='\0'))
     {
         tmp[i]= *str;
         str++;
