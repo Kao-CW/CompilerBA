@@ -4,8 +4,10 @@
 char str1[100];
 char str2[100];
 char *p,*q;
-char tmp[10];
-char* fun(char *str);
+char tmp[20];
+char peekt[20];
+char *fun(char *str);
+void *peek(char *str);
 
 int main()
 {
@@ -18,31 +20,42 @@ int main()
     }
     q= str2;
     printf("\n------------------------\n");
-    tmp=fun(q);
-    q++;
-    printf("%s\n",tmp);
-    tmp=fun(q);
-    printf("%s\n",tmp);
-    tmp=fun(q);
-    printf("%s\n",tmp);
-    tmp=fun(q);
-    printf("%s\n",tmp);
+    while(*q!='\0'){
+        q=fun(q);
+        printf("%s\n",tmp);
+        printf("%c\n",*q);
+        peek(q);
+        printf("%s\n",peekt);
+        printf("------------------------\n");
 
+    }
 
     return 0;
 }
-char* fun(char *str){
+char *fun(char *str){
     int i = 0;
-    char p[10];
-    char *t = p;
+    memset(tmp, '\0', 10);
     while (*str!= '\n')
     {
-        p[i]= *str;
+        tmp[i]= *str;
         str++;
         i++;
     }
     str++;
-    return t;
+    return str;
+}
+
+void *peek(char *str){
+    memset(peekt, '\0', 10);
+    char *p;
+    p = str;
+    int i = 0;
+    while (*p != '\n')
+    {
+        peekt[i]= *p;
+        p++;
+        i++;
+    }
 }
 
 

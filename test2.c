@@ -1,64 +1,67 @@
 #include <stdio.h>
 #include<string.h>
-#include<stdbool.h>
 #include<stdlib.h>
-
-char s[100];
-char pr[100];
-int prp = 0;
-char *q = pr;
-char *p;
-int i = 0;
-char *fun(char *p,int prp);
-
+char str1[100];
+char str2[100];
+char *p,*q;
+char tmp[20];
+char peekt[20];
+char *fun(char *str);
+void *peek(char *str);
 
 int main()
 {
-    FILE *fp;
-    fp = fopen("D://CPROJECT//CompilerBA//mytestcase.txt","r");
-    while((s[i]=fgetc(fp))!=EOF)
+    q = str2;
+    scanf("%[^\0]", str2);
+    while (*q!= '\0')
     {
-        i++;
+        printf("%c",*q);
+        q++;
     }
-    char *p =s;
+    q= str2;
+    printf("\n------------------------\n");
+    
+    q=fun(q);
+    printf("%s\n",tmp);
+    printf("%c\n",*q);
+    peek(q);
+    printf("q=%c\n",*q);
+    printf("%s\n",peekt);
+    printf("------------------------\n");
 
-    p++;
- 
-    /*while(*p!='\0')
-    {
-        printf("%c", *p);
-        p++;
-    }*/
-    //fun(p,prp);
-    /*pr[0] ='0';
-    pr[1]='a';
-    printf("\n%c\n", pr[0]);
-    printf("%c\n", pr[1]);*/
-
-    //q = pr;
-    printf("-----------------\n");
-    printf("%c", pr[0]);
-    printf("%c", pr[1]);
-    printf("%c", pr[2]);
-    printf("%c", pr[3]);
-    printf("%c", pr[4]);
+    
 
     return 0;
 }
-char *fun(char *p,int prp)
-{
-    printf("\nprp=%d\n", prp);
-    printf("*p=%c\n", *p);
-    while(*p!='\0')
+char *fun(char *str){
+    int i = 0;
+    memset(tmp, '\0', 10);
+    while (*str!= '\n')
     {
-        pr[prp] = *p;
-        printf("pr[ %d ] = %c \n", prp, pr[prp]);
-        prp++;
-        p++;
+        tmp[i]= *str;
+        str++;
+        i++;
     }
-    pr[prp] = *p;
-    printf("pr[ %d ] = %c \n", prp, pr[prp]);
-   
-    
-    return p;
+    str++;
+    return str;
+}
+
+void *peek(char *str){
+    memset(peekt, '\0', 10);
+    char *p;
+    p = str;
+    int i = 0;
+    while (*p != '\n')
+    {
+        peekt[i]= *p;
+        p++;
+        i++;
+    }
+    printf("str=%c\n", *q);
+    q++;
+    printf("str=%c\n", *q);
+    q++;
+    printf("str=%c\n", *q);
+    q++;
+    q++;
 }
