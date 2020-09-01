@@ -1,2 +1,7 @@
-str.length("123");
-test_id;
+s AbdH
+b Cc
+c Bc|;
+d ef
+e G|;
+f F|;
+END_OF_GRAMMAR

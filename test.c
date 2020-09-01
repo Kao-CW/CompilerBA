@@ -1,60 +1,54 @@
 #include <stdio.h>
 #include<string.h>
 #include<stdlib.h>
-char str1[100];
-char str2[100];
-char *p,*q;
-char tmp[20];
-char peekt[20];
-char *fun(char *str);
-void *peek(char *str);
+char s[100];
+char line[20];
+char *ps = s;
+char *pline;
+void first(char *str);
+void gline(char *str);
 
 int main()
 {
-    q = str2;
-    scanf("%[^\0]", str2);
-    while (*q!= '\0')
-    {
-        printf("%c",*q);
-        q++;
+    
+    scanf("%[^\0]", s);
+    gline(ps);
+    pline = line;
+    while (*pline!= '\0'){
+        printf("%c",*pline);      
+        pline++;
     }
-    /*
-    q= str2;
-    printf("\n------------------------\n");
-    while(*q!='\0'){
-        q=fun(q);
-        printf("%s\n",tmp);
-        //printf("%c\n",*q);
-        printf("------------------------\n");
-
-    }*/
-
+    pline = line;
+    if(strcmp(pline,"END_OF_GRAMMAR")==0){
+        printf("11111");
+    }
+    printf("22222");
+    // printf("\n");  
+    // gline(ps);
+    // pline = line;
+    // while (*pline!= '\0'){
+    //     printf("%c",*pline);      
+    //     pline++;
+    // }
     return 0;
 }
-char *fun(char *str){
-    int i = 0;
-    memset(tmp, '\0', 10);
-    while ((*str!= '\n')^(*str=='\0'))
-    {
-        tmp[i]= *str;
-        str++;
-        i++;
+
+void first(char *str){
+    pline = line;
+    while(strcmp(pline,"END_OF_GRAMMAR")!=0){
+
     }
-    str++;
-    return str;
+    
+
 }
 
-void *peek(char *str){
-    memset(peekt, '\0', 10);
-    char *p;
-    p = str;
+void gline(char *str){
     int i = 0;
-    while (*p != '\n')
-    {
-        peekt[i]= *p;
-        p++;
+    memset(line, '\0', 20);
+    while(*ps!='\n'){
+        line[i] = *ps;
         i++;
+        ps++;
     }
+    ps++;
 }
-
-
