@@ -18,11 +18,11 @@ int main()
         printf("%c",*pline);      
         pline++;
     }
-    pline = line;
-    if(strcmp(pline,"END_OF_GRAMMAR")==0){
-        printf("11111");
-    }
-    printf("22222");
+    // pline = line;
+    // if(strcmp(pline,"END_OF_GRAMMAR")==0){
+    //     printf("11111");
+    // }
+    // printf("22222");
     // printf("\n");  
     // gline(ps);
     // pline = line;

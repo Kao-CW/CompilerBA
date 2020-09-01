@@ -1,7 +1,6 @@
-s AbdH
-b Cc
-c Bc|;
-d ef
-e G|;
-f F|;
+s ac$
+c C|;
+a AbcD|bq
+b Bb|;
+q Q|;
 END_OF_GRAMMAR

@@ -130,9 +130,8 @@ void gline(char *str){
         i++;
         ps++;
     }
-    printf("%s\n", line);
+    printf("gline success : %s\n", line);
     ps++;
-    printf("gline success\n");
 }
 
 void add(char target[], char *p){
@@ -176,4 +175,24 @@ void final_print(){
         printf("us=%s\n", firstset[j].us);
         printf("----------------------------------------------\n"); 
     }
+    char tmp;
+    char *p;
+    for (int j = 0; j <=c;j++){
+        printf("%c  ", firstset[j].nonterminal);
+        p = firstset[j].terminal;
+        tmp = *p;
+        printf("%c",*p);      
+        p++;
+        while (*p!= '\0'){            
+            if(*p==tmp){
+                p++;
+            }
+            else{
+                printf("%c",*p); 
+                tmp = *p;
+            }
+        }
+        printf("\n");
+    }
+    printf("END_OF_FIRST\n");
 }
