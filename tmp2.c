@@ -1,307 +1,205 @@
 #include <stdio.h>
 #include<string.h>
-#include<stdbool.h>
 #include<stdlib.h>
-
-char *gettoken(char *str);
-void program();
-void stmts();
-void stmt();
-void expp();
-void primary();
-void primary_tail();
-char *match(char *str,char *s);
-void error();
-void peek(char *str);
-char token[20];
-char peekt[20];
 char s[100];
-char *str;
-//scanner
-char pr[100];
-char *prp=pr;
-bool checkBR = true;
-bool checkstr = true;
-char *scanner(char *p);
-char *caseid(char *p);
-int invaildinput();
-char *casestr(char *p);
-int checkgm(bool a1,bool a3);
-void addn();
-void addtoken(char token[]);
+char line[20];
+char *pline;
+char *ps;
+void func_1(char *str);
+void func_2();
+void gline(char *str);
+void add(char target[], char *p);
+void sort(char target[]);
+void final_print();
+int match(char a,int k);
+int i=0; // nontern count
+int key = 1;
+struct set{
+    char nonterminal;
+    char terminal[30];
+    char us[10];
+    char buf[10];
+};
 
+struct set firstset[15];
 int main()
 {
+    
     scanf("%[^\0]", s);
-    char *p = s;
-    while (*p!= '\0')
-    {
-        printf("%c",*p);
-        p++;
+    ps = s;
+    while (*ps!= '\0'){
+        printf("%c",*ps);      
+        ps++;
     }
-    p = s;
-    printf("\n");
-    scanner(p);
-    printf("scannerdone\n");
-    if(checkgm(checkBR,checkstr))
-    {    
-        *prp = '$';
-        prp++;
-        addn();
-        str = pr;
-        program();
-        printf("Valid");
-    }
-    else
-    {
-        printf("invaild input\n");
-    }
-    
+    printf("\n----------------------------------------------\n");
+    ps = s;
+    func_1(ps);
+    func_2();
+    final_print();
+
     return 0;
-    //printf("Valid");
 }
 
-void program(){
-    printf("---------------program--------------\n");
-    stmts();
-}
-void stmts(){
-    printf("---------------stmts--------------\n");
-    printf("peekt== %s \n ", peekt);
-    printf("token== %s \n ", token);
-    peek(str);
-    printf("peekt== %s \n ", peekt);
-    if((!(strcmp(peekt,"ID")))||!((strcmp(peekt,"STRLIT")))){
-        stmt();
-        stmts();
-    }
-    else if(!(strcmp(peekt,"$"))||!(strcmp(peekt,"SEMICOLON"))){
-        //lam
-    }
-    else{
-        printf("1---------\n");
-        error();
-    }
-}
-void stmt(){
-    printf("---------------stmt--------------\n");
-    expp();
-    printf("2------------------------\n");
-    str = gettoken(str);
-    match(str,"SEMICOLON");//semi
-    printf("2ok----------------------\n");
-    
-}
-void expp(){
-    printf("---------------expp--------------\n");
-    peek(str);
-    printf("peekt==%s\n", peekt);
-    if(!(strcmp(peekt,"ID"))){
-        primary();
-    }
-    else if(!(strcmp(peekt,"STRLIT"))){
-        printf("3------------------------\n");
-        str = gettoken(str);
-        match(str,"STRLIT");//strlit
-        printf("token==%s\n", token);
-        printf("3ok----------------------\n");
-    }
-    else if(!(strcmp(peekt,"$"))||!(strcmp(peekt,"SEMICOLON"))){
-        //lam
-    }
-    else{
-        printf("4-----------------------\n");
-        error();
-    }
-}
-void primary(){
-    printf("---------------primary--------------\n");
-    printf("5--------------------------\n");
-    str = gettoken(str);
-    match(str,"ID");//id
-    printf("5ok------------------------\n");
-    primary_tail();
-}
-void primary_tail(){
-    printf("---------------primary tail--------------\n");
-    peek(str);
-    printf("peekt==%s\n", peekt);
-    if(!(strcmp(peekt,"DOT"))){
-        printf("6--------------------------\n");
-        str = gettoken(str);
-        match(str,"DOT");//dot
-        printf("token==%s\n", token);
-        printf("6ok------------------------\n");
-        printf("7--------------------------\n");
-        str = gettoken(str);
-        match(str,"ID");//id
-        printf("token==%s\n", token);
-        printf("7ok------------------------\n");
-        primary_tail();
-    }
-    else if (!(strcmp(peekt,"LBR"))){
-        printf("8-------------------------\n");
-        str = gettoken(str);
-        match(str,"LBR");//lbr
-        printf("token==%s\n", token);
-        printf("8ok-----------------------\n");
-        expp();
-        printf("9-------------------------\n");
-        printf("before match rbr token==%s\n", token);
-        printf("match rbr= %d\n", strcmp(peekt, "RBR"));
-        str = gettoken(str);
-        match(str,"RBR");//rbr
-        printf("before gettoken==%s\n", token);
-        printf("9ok-----------------------\n");
-        primary_tail();
-    }
-    else if(!(strcmp(peekt,"$"))||!(strcmp(peekt,"SEMICOLON"))){
-        //lam!(strcmp(token,"\0"))
-    }
-    else{
-        printf("10-------------------------\n");
-        error();
-    }
-}
-char *match(char *str,char *s){
-    if(strcmp(token, s)!=0){
-        error();
-    }
-    printf("match done\n");
-    return str;
-
-}
-void error(){
-    printf("Invalid\n");
-    exit(1);
-}
-char *gettoken(char *str){
-    int i = 0;
-    memset(token, '\0', 10);
-    while ((*str!= '\n')^(*str=='\0'))//^(*str!='\0')
-    {
-        token[i]= *str;
-        str++;
+void func_1(char *str){
+    gline(ps);
+    pline = line;
+     printf("cmp=%d\n", strcmp(pline, "END_OF_GRAMMAR"));
+    while(strcmp(pline,"END_OF_GRAMMAR")!=0){
+        pline = line;
+        firstset[i].nonterminal = *pline;
+        pline=pline+2;
+        while (*pline != '\0')
+        {       
+            if((key==1||key==2) && (*pline >= 'a' && *pline <= 'z')){
+                //nonterminal
+                add(firstset[i].us, pline);
+                key = 2;
+            }
+            else if(key==1 &&(*pline >= 'A' && *pline <= 'Z')){
+                //terminal
+                add(firstset[i].terminal, pline);
+                key = 0;
+            }
+            else if(key==2 &&(*pline >= 'A' && *pline <= 'Z')){
+                //terminal
+                add(firstset[i].terminal, pline);
+                key = 0;
+            }
+            else if(key==1 &&((*pline=='!')||(*pline=='@')||(*pline=='#')||(*pline=='%')||(*pline=='^')||(*pline=='&')||(*pline=='*'))){
+                //terminal
+                add(firstset[i].terminal, pline);
+                key = 0;
+            }
+            else if(key==1 &&*pline == ';'){
+                add(firstset[i].terminal, pline);
+                key = 0;
+                //eol         
+            }
+            else if(key==1 &&*pline == '$'){
+                add(firstset[i].terminal, pline);
+                key = 0;
+                //eof
+            }
+             else if(*pline=='|'){
+                key = 1;                
+            }
+            else{
+                //ket!=0
+            }
+            pline++;
+        }
+        printf("NONTERN=%c\n", firstset[i].nonterminal);
+        printf("TERN=%s\n", firstset[i].terminal);
+        printf("us=%s\n", firstset[i].us);
+        printf("----------------------------------------------\n");
+        gline(ps);
+        key = 1;
+        pline = line;
+        printf("cmp=%d\n", strcmp(pline, "END_OF_GRAMMAR"));
+        pline = line;
         i++;
     }
-    str++;
-    printf("gettokendone token == %s\n",token);
-    return str;
+    i--;
 }
-void peek(char *str){ 
-    char *p;
-    p = str;
+
+void func_2(){
+    int c = i;
+    for (int j = c; j >=0;j--){
+        char *tmp = firstset[j].us;
+        while(*tmp!='\0'){
+            char a = *tmp;
+            int t=match(a, j);
+            strcat(firstset[j].terminal, firstset[t].terminal);
+            tmp++;
+        }
+    }
+    for (int j = 0; j <=c;j++){     
+        sort(firstset[j].terminal);
+    }
+    int size = c + 1;
+    for (int i = 1; i <=c;i++){
+        struct set tmp = firstset[i];
+        int j = i-1;
+        while(tmp.nonterminal>firstset[j].nonterminal && j>=0){
+            firstset[j + 1] = firstset[j];
+            j--;
+        }
+        firstset[j + 1] = tmp;
+    }
+
+}
+
+void gline(char *str){
     int i = 0;
-    memset(peekt, '\0', 10);
-    if(*p=='$'){
-        peekt[0] = '$';
+    memset(line, '\0', 20);
+    while(!((*ps!='\0')^(*ps!='\n'))){
+        line[i] = *ps;
+        i++;
+        ps++;
     }
-    else {
-
-        while ((*p != '\n')^(*str=='\0'))
-       {          
-           peekt[i]= *p;
-           p++;
-           i++;
-       }
-    }
-    printf("peekdone peekt == %s\n",peekt);
+    printf("gline success : %s\n", line);
+    ps++;
 }
-//scanner-----------------------------------------------
-char *scanner(char* p){
-    while (*p !='\0')
-    {
-        if ((*p >= 'a' && *p <= 'z') || (*p >= 'A' && *p <= 'Z')||*p=='_')
-        {
-            p=caseid(p);           
+
+void add(char target[], char *p){
+    char a[1];
+    a[0] = *p;
+    strncat(target, a,1);
+}
+
+void sort(char target[]){
+    int size = strlen(target);
+    for (int i = 1; i < size; i++){
+        int tmp = target[i];
+        int j = i - 1;
+        while (tmp > target[j] && j >= 0){
+            target[j + 1] = target[j];
+            j--;
         }
-        else if (*p == '.')
-        {
-            addtoken("DOT");
-            addn();
+        target[j + 1] = tmp;
+    }
+}
+
+int match(char a,int k){
+    int c = i;
+    int ans=0;
+    for (int j = c; j >k;j--){
+        if(a==firstset[j].nonterminal){
+            ans = j;
         }
-        else if (*p == '(')
-        {
-            addtoken("LBR");
-            addn();
-        }
-        else if (*p == ')')
-        {
-            addtoken("RBR");
-            addn();
-        }
-        else if (*p == '"')
-        {
-            checkstr = false;
-            p=casestr(p);
-        }
-        else if (*p == ';')
-        {
-            addtoken("SEMICOLON");
-            addn();        
-        }
-        else if (*p=='\n'){}
-        else if (*p==' ')
-        {
-            p++;
-        }
-        else
-        {
-            p--;
-            invaildinput();
-        }
+    }
+    return ans;
+}
+
+void final_print(){
+    printf("----------------------------------------------\n"); 
+    printf("final print\n");
+    printf("----------------------------------------------\n");
+    int c = i;
+    for (int j = 0; j <=c;j++){
+        printf("NONTERN=%c\n", firstset[j].nonterminal);
+        printf("TERN=%s\n", firstset[j].terminal);
+        printf("us=%s\n", firstset[j].us);
+        printf("----------------------------------------------\n"); 
+    }
+    char tmp;
+    char *p;
+    for (int j = 0; j <=c;j++){
+        printf("%c  ", firstset[j].nonterminal);
+        p = firstset[j].terminal;
+        tmp = *p;
+        printf("%c",*p);      
         p++;
+        while (*p!= '\0'){            
+            if(*p==tmp){
+                p++;
+            }
+            else{
+                printf("%c",*p); 
+                tmp = *p;
+            }
+        }
+        printf("\n");
     }
-    p++;
-    return p;
-}
-char *caseid(char *p){
-    addtoken("ID");
-    while((*p >= 'a' && *p <= 'z') || (*p >= 'A' && *p <= 'Z')||(*p >= '0' && *p <= '9')||*p=='_')
-    {
-        p++;       
-    }
-    addn();
-    p--;
-    return p;
-}
-int invaildinput(){
-    printf("invaild input\n");
-    exit(1);
-}
-char *casestr(char *p){
-    addtoken("STRLIT");
-
-    p++;
-    while(*p!='"'^*p=='\0')
-    {
-        p++; 
-    }
-    if(*p=='"')
-    {
-        checkstr = true;
-    }
-    else
-    {
-        invaildinput();
-    }
-    addn();
-    return p;
-}
-int checkgm(bool a1,bool a3){
-    if(a1==true&&a3==true)
-    {
-        return 1;
-    }
-    return 0;
-}
-void addn()
-{
-    *prp = '\n';
-    prp++;
-}
-void addtoken(char token[]){
-    char *tmp=token; 
-    strcat(prp, tmp);
-    prp = prp + strlen(tmp);
+    printf("END_OF_FIRST\n");
 }

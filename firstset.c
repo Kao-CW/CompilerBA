@@ -12,15 +12,22 @@ void add(char target[], char *p);
 void sort(char target[]);
 void final_print();
 int match(char a,int k);
-int i=0; // nontern count
+int i=0;  //firstset count
+int pc = 0; //production count
 int key = 1;
-struct set{
+struct set1{
     char nonterminal;
     char terminal[30];
     char us[10];
 };
+struct set2{
+    char nonterminal;
+    char terminal[30];
+    int tag;
+};
+struct set1 firstset[15];
+struct set2 production[15];
 
-struct set firstset[15];
 int main()
 {
     
@@ -33,8 +40,12 @@ int main()
     printf("\n----------------------------------------------\n");
     ps = s;
     func_1(ps);
-    func_2();
-    final_print();
+    printf("here");
+    for (int j = 0; j <pc;j++){
+        printf("NONTERN=%c\n", production[j].nonterminal);
+        printf("TERN=%s\n", production[j].terminal);
+        printf("----------------------------------------------\n"); 
+    }
 
     return 0;
 }
@@ -42,84 +53,32 @@ int main()
 void func_1(char *str){
     gline(ps);
     pline = line;
-     printf("cmp=%d\n", strcmp(pline, "END_OF_GRAMMAR"));
     while(strcmp(pline,"END_OF_GRAMMAR")!=0){
         pline = line;
-        firstset[i].nonterminal = *pline;
+        char t = *pline;
+        production[pc].nonterminal = t;
         pline=pline+2;
-        while (*pline != '\0')
-        {       
-            if(key==1 && (*pline >= 'a' && *pline <= 'z')){
-                //nonterminal
-                add(firstset[i].us, pline);
-            }
-            else if(key==1 &&(*pline >= 'A' && *pline <= 'Z')){
-                //terminal
-                add(firstset[i].terminal, pline);
-                key = 0;
-            }
-            else if(key==1 &&((*pline=='!')||(*pline=='@')||(*pline=='#')||(*pline=='%')||(*pline=='^')||(*pline=='&')||(*pline=='*'))){
-                //terminal
-                add(firstset[i].terminal, pline);
-                key = 0;
-            }
-            else if(key==1 &&*pline == ';'){
-                add(firstset[i].terminal, pline);
-                key = 0;
-                //eol         
-            }
-            else if(key==1 &&*pline == '$'){
-                add(firstset[i].terminal, pline);
-                key = 0;
-                //eof
-            }
-             else if(*pline=='|'){
-                key = 1;                
+        while(*pline != '\0'){
+            if(*pline=='|'){
+                pc++;
+                production[pc].nonterminal = t;
             }
             else{
-                //ket!=0
+                add(production[pc].terminal, pline);
             }
             pline++;
         }
-        printf("NONTERN=%c\n", firstset[i].nonterminal);
-        printf("TERN=%s\n", firstset[i].terminal);
-        printf("us=%s\n", firstset[i].us);
-        printf("----------------------------------------------\n");
         gline(ps);
-        key = 1;
         pline = line;
         printf("cmp=%d\n", strcmp(pline, "END_OF_GRAMMAR"));
         pline = line;
-        i++;
+        pc++;
     }
-    i--;
+    
 }
 
 void func_2(){
-    int c = i;
-    for (int j = c; j >=0;j--){
-        char *tmp = firstset[j].us;
-        while(*tmp!='\0'){
-            char a = *tmp;
-            int t=match(a, j);
-            strcat(firstset[j].terminal, firstset[t].terminal);
-            tmp++;
-        }
-    }
-    for (int j = 0; j <=c;j++){     
-        sort(firstset[j].terminal);
-    }
-    int size = c + 1;
-    for (int i = 1; i <=c;i++){
-        struct set tmp = firstset[i];
-        int j = i-1;
-        while(tmp.nonterminal>firstset[j].nonterminal && j>=0){
-            firstset[j + 1] = firstset[j];
-            j--;
-        }
-        firstset[j + 1] = tmp;
-    }
-
+  
 }
 
 void gline(char *str){
