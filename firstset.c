@@ -3,10 +3,11 @@
 #include<stdlib.h>
 char s[100];
 char line[20];
-char *pline;
+char *pline,*tmp;
 char *ps;
 void func_1(char *str);
 void func_2();
+void findfirst(int k,char t);
 void gline(char *str);
 void add(char target[], char *p);
 void sort(char target[]);
@@ -22,7 +23,8 @@ struct set1{
 };
 struct set2{
     char nonterminal;
-    char terminal[30];
+    char terminal[10];
+    char first[15];
     int tag;
 };
 struct set1 firstset[15];
@@ -57,6 +59,7 @@ void func_1(char *str){
         pline = line;
         char t = *pline;
         production[pc].nonterminal = t;
+        production[pc].tag = 0;
         pline=pline+2;
         while(*pline != '\0'){
             if(*pline=='|'){
@@ -77,9 +80,49 @@ void func_1(char *str){
     
 }
 
+
 void func_2(){
+    for (int j = 0; j <pc;j++){
+        tmp = production[j].terminal;
+        while(*tmp!='\0'){
+            if((*tmp>='A'&&*tmp<='Z')||*tmp=='$'){
+                add(production[j].first, tmp);
+                break;
+            }
+            else if(*tmp == ';'){
+                add(production[j].first, tmp);
+                production[j].tag = 1;
+                break;
+            }
+            else if(*tmp>='a'&& *tmp<='z'){
+                findfirst(j+1,*tmp);
+            }
+        }
+    }
   
 }
+
+void findfirst(int k,char t){
+    char *a1;
+    for (int j = k; j < pc;j++){
+        if(production[j].nonterminal==t){
+            a1 = production[j].terminal;
+            if((*tmp>='A'&&*tmp<='Z')||*tmp=='$'){
+                add(production[j].first, tmp);
+                break;
+            }
+            else if(*tmp == ';'){
+                add(production[j].first, tmp);
+                production[j].tag = 1;
+                break;
+            }
+            else if(*tmp>='a'&& *tmp<='z'){
+                findfirst(j+1,*tmp);
+            }
+        }
+    }
+}
+
 
 void gline(char *str){
     int i = 0;
