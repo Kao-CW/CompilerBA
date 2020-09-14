@@ -7,7 +7,8 @@ char *pline,*tmp;
 char *ps;
 void func_1(char *str);
 void func_2();
-void findfirst(int k,char t);
+void func_3();
+void findfirst(int k,int tar,char t);
 void gline(char *str);
 void add(char target[], char *p);
 void sort(char target[]);
@@ -18,13 +19,13 @@ int pc = 0; //production count
 int key = 1;
 struct set1{
     char nonterminal;
-    char terminal[30];
-    char us[10];
+    char first[30];
+    int tag;
 };
 struct set2{
     char nonterminal;
     char terminal[10];
-    char first[15];
+    char first[30];
     int tag;
 };
 struct set1 firstset[15];
@@ -42,10 +43,19 @@ int main()
     printf("\n----------------------------------------------\n");
     ps = s;
     func_1(ps);
-    printf("here");
+    func_2();
+    func_3();
+    // for (int j = 0; j <pc;j++){
+    //     printf("NONTERN=%c\n", production[j].nonterminal);
+    //     printf("TERN=%s\n", production[j].terminal);
+    //     printf("FIRST=%s\n", production[j].first);
+    //     printf("TAG=%d\n", production[j].tag);
+    //     printf("----------------------------------------------\n"); 
+    // }
     for (int j = 0; j <pc;j++){
-        printf("NONTERN=%c\n", production[j].nonterminal);
-        printf("TERN=%s\n", production[j].terminal);
+        printf("NONTERN=%c\n", firstset[j].nonterminal);
+        printf("FIRST=%s\n", firstset[j].first);
+        printf("TAG=%d\n", production[j].tag);
         printf("----------------------------------------------\n"); 
     }
 
@@ -73,11 +83,10 @@ void func_1(char *str){
         }
         gline(ps);
         pline = line;
-        printf("cmp=%d\n", strcmp(pline, "END_OF_GRAMMAR"));
+        //printf("cmp=%d\n", strcmp(pline, "END_OF_GRAMMAR"));
         pline = line;
         pc++;
-    }
-    
+    }   
 }
 
 
@@ -87,6 +96,7 @@ void func_2(){
         while(*tmp!='\0'){
             if((*tmp>='A'&&*tmp<='Z')||*tmp=='$'){
                 add(production[j].first, tmp);
+                production[j].tag = 0;
                 break;
             }
             else if(*tmp == ';'){
@@ -95,34 +105,67 @@ void func_2(){
                 break;
             }
             else if(*tmp>='a'&& *tmp<='z'){
-                findfirst(j+1,*tmp);
+                //printf("find %c\n", *tmp);
+                findfirst(j+1,j,*tmp);
+                tmp++;
             }
+            
         }
     }
   
 }
 
-void findfirst(int k,char t){
-    char *a1;
-    for (int j = k; j < pc;j++){
-        if(production[j].nonterminal==t){
-            a1 = production[j].terminal;
-            if((*tmp>='A'&&*tmp<='Z')||*tmp=='$'){
-                add(production[j].first, tmp);
-                break;
-            }
-            else if(*tmp == ';'){
-                add(production[j].first, tmp);
-                production[j].tag = 1;
-                break;
-            }
-            else if(*tmp>='a'&& *tmp<='z'){
-                findfirst(j+1,*tmp);
-            }
+void func_3(){
+    char a2,a3;
+    int t=0;
+    a2 = production[0].nonterminal;
+    firstset[0].nonterminal = a2;
+    strcat(firstset[0].first, production[0].first);
+    firstset[0].tag = 0;
+    firstset[0].tag += production[0].tag;
+    for (int j = 1; j <pc;j++){
+        if(production[j].nonterminal==a2){
+            strcat(firstset[t].first, production[j].first);
+            firstset[t].tag = firstset[t].tag +production[j].tag;
+        }
+        else{
+            t++;
+            firstset[t].tag = 0;
+            a2= production[j].nonterminal;
+            firstset[t].nonterminal = a2;
+            strcat(firstset[t].first, production[j].first);
+            firstset[t].tag = firstset[t].tag +production[j].tag;
         }
     }
 }
 
+void findfirst(int k,int tar,char t){
+    char *a1;
+    for (int j = k; j < pc;j++){
+        if(production[j].nonterminal==t){
+            a1 = production[j].terminal;
+            while(*a1!='\0'){
+                if((*a1>='A'&&*a1<='Z')||*a1=='$'){
+                    add(production[tar].first, a1);
+                    production[j].tag = 0;
+                    break;
+                }
+                else if(*a1 == ';'){
+                    add(production[tar].first, a1);
+                    production[tar].tag = 1;
+                    break;
+                }
+                else if(*a1>='a'&& *a1<='z'){
+                    //printf("find %c\n", *a1);
+                    findfirst(j+1,tar,*a1);
+                    a1++;
+                }
+                
+            }
+            
+        }
+    }
+}
 
 void gline(char *str){
     int i = 0;
@@ -132,7 +175,7 @@ void gline(char *str){
         i++;
         ps++;
     }
-    printf("gline success : %s\n", line);
+    //printf("gline success : %s\n", line);
     ps++;
 }
 
@@ -173,15 +216,14 @@ void final_print(){
     int c = i;
     for (int j = 0; j <=c;j++){
         printf("NONTERN=%c\n", firstset[j].nonterminal);
-        printf("TERN=%s\n", firstset[j].terminal);
-        printf("us=%s\n", firstset[j].us);
+        printf("TERN=%s\n", firstset[j].first);
         printf("----------------------------------------------\n"); 
     }
     char tmp;
     char *p;
     for (int j = 0; j <=c;j++){
         printf("%c  ", firstset[j].nonterminal);
-        p = firstset[j].terminal;
+        p = firstset[j].first;
         tmp = *p;
         printf("%c",*p);      
         p++;
